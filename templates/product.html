@@ -1,0 +1,16 @@
+<!-- Название у нас будет products -->
+{% block title %}
+Products
+{% endblock title %}
+
+<!-- В контенте на странице мы выводим все товары -->
+{% block content %}
+<h1>Все товары</h1>
+<ul>
+{% for product in products %}
+<li>
+    <a href="{% url 'products:product-detail' product.id %}"> {{ product.name }} </a>
+</li>
+{% endfor %}
+</ul>
+{% endblock content %}
