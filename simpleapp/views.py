@@ -1,12 +1,16 @@
-from datetime import  datetime
-
 from simpleapp.filters import ProductFilter
 
 from .models import Product
-from .forms import ProductForm
+from .forms import ProductForm, UserRegistrationForm
 from django.views.generic import (
-    ListView, DetailView, CreateView
+    ListView, DetailView, CreateView, FormView
 )
+from django.contrib.auth import get_user_model
+from django.urls import reverse
+
+
+User = get_user_model()
+
 
 class ProductsList(ListView):
     model = Product
@@ -42,3 +46,20 @@ class ProductCreate(CreateView):
     model = Product
     # и новый шаблон, в котором используется форма.
     template_name = 'product_edit.html'
+
+
+class RegisterUserView(FormView):
+    form_class = UserRegistrationForm
+    template_name = 'registration.html'
+
+    def get_success_url(self) -> str:
+        return reverse('products:product-list')
+
+    def post(self, request, *args: str, **kwargs):
+        form = self.form_class(request.POST)
+
+        if form.is_valid():
+            user = User(username=form.data['username'])
+            user.set_password(form.data['password'])
+            user.save()
+        return super().post(request, *args, **kwargs)
