@@ -40,9 +40,6 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'django.contrib.flatpages',
 
-    'django.contrib.auth',
-    'django.contrib.messages',
-    'django.contrib.sites',
     'allauth.socialaccount.providers.google',
 
     'allauth',
@@ -51,8 +48,6 @@ INSTALLED_APPS = [
 
     'simpleapp',
     'django_filters',
-    'sign',
-    'protect',
 ]
 
 MIDDLEWARE = [
@@ -85,7 +80,6 @@ TEMPLATES = [
 ]
 
 AUTHENTICATION_BACKENDS = [
-    ...
     # Needed to login by username in Django admin, regardless of `allauth`
     'django.contrib.auth.backends.ModelBackend',
 

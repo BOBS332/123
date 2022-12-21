@@ -1,17 +1,17 @@
-from datetime import  datetime
-
 from simpleapp.filters import ProductFilter
 
 from .models import Product
+
 from .forms import ProductForm
 from .forms import ProductForm, UserRegistrationForm
-
+from .forms import ProductForm, UserRegistrationForm
 from django.views.generic import (
 
     ListView, DetailView, CreateView, FormView
 )
 from django.contrib.auth import get_user_model
 from django.urls import reverse
+
 
 from django.shortcuts import render
 from django.views.generic import TemplateView
@@ -39,6 +39,8 @@ class ProductsList(ListView):
         context = super().get_context_data(**kwargs)
         context['filterset'] = self.filterset
         return context
+
+
 class ProductDetail(DetailView):
     # Модель всё та же, но мы хотим получать информацию по отдельному товару
     model = Product
@@ -47,13 +49,14 @@ class ProductDetail(DetailView):
     # Название объекта, в котором будет выбранный пользователем продукт
     context_object_name = 'product'
     pk_url_kwarg = 'id'
+
+
 class ProductCreate(CreateView):
     # Указываем нашу разработанную форму
     form_class = ProductForm
     # модель товаров
     model = Product
     # и новый шаблон, в котором используется форма.
-    template_name = 'product_edit.html'
     template_name = 'product_edit.html'
 
 
@@ -71,4 +74,5 @@ class RegisterUserView(FormView):
             user = User(username=form.data['username'])
             user.set_password(form.data['password'])
             user.save()
+
         return super().post(request, *args, **kwargs)
