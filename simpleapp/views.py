@@ -1,19 +1,16 @@
 from simpleapp.filters import ProductFilter
-
 from .models import Product
-
 from .forms import ProductForm
 from .forms import ProductForm, UserRegistrationForm
 from .forms import ProductForm, UserRegistrationForm
 from django.views.generic import (
-
-    ListView, DetailView, CreateView, FormView
+    ListView, DetailView, CreateView, FormView,
 )
 from django.contrib.auth import get_user_model
 from django.urls import reverse
+from django.shortcuts import redirect
 
 
-from django.shortcuts import render
 from django.views.generic import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -31,10 +28,12 @@ class ProductsList(ListView):
     template_name = 'products.html'
     context_object_name = 'products'
     paginate_by = 2
+
     def get_queryset(self):
         queryset = super().get_queryset()
         self.filterset = ProductFilter(self.request.GET, queryset)
         return self.filterset.qs
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['filterset'] = self.filterset
@@ -67,12 +66,11 @@ class RegisterUserView(FormView):
     def get_success_url(self) -> str:
         return reverse('products:product-list')
 
-    def post(self, request, *args: str, **kwargs):
+    def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
 
         if form.is_valid():
             user = User(username=form.data['username'])
             user.set_password(form.data['password'])
             user.save()
-
-        return super().post(request, *args, **kwargs)
+        return redirect(self.get_success_url())
